@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Radar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -30,18 +30,30 @@ const generateChineseName = () => {
   return randomSurname + randomName;
 };
 
-function App() {
-  const playerName = generateChineseName();
-  
-  // Sample data - replace with actual game results
-  const gameResults = {
-    準確度: 85,
-    反應時間: 75,
-    得分: 90,
-    連擊數: 80,
-    節奏感: 88,
-    穩定度: 82
+// Function to generate random game results
+const generateRandomResults = () => {
+  return {
+    準確度: Math.floor(Math.random() * 30) + 70, // Random number between 70-100
+    反應時間: Math.floor(Math.random() * 30) + 70,
+    得分: Math.floor(Math.random() * 30) + 70,
+    連擊數: Math.floor(Math.random() * 30) + 70,
+    節奏感: Math.floor(Math.random() * 30) + 70,
+    穩定度: Math.floor(Math.random() * 30) + 70
   };
+};
+
+function App() {
+  const [playerName, setPlayerName] = useState(generateChineseName());
+  const [gameResults, setGameResults] = useState(generateRandomResults());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setPlayerName(generateChineseName());
+      setGameResults(generateRandomResults());
+    }, 60000); // Update every minute (60000 ms)
+
+    return () => clearInterval(timer); // Cleanup on component unmount
+  }, []);
 
   const data = {
     labels: Object.keys(gameResults),
@@ -67,16 +79,34 @@ function App() {
           display: true
         },
         suggestedMin: 0,
-        suggestedMax: 100
+        suggestedMax: 100,
+        ticks: {
+          font: {
+            size: 16 // Increase font size for axis labels
+          }
+        },
+        pointLabels: {
+          font: {
+            size: 18 // Increase font size for category labels
+          }
+        }
       }
     },
     plugins: {
       legend: {
         position: 'top',
+        labels: {
+          font: {
+            size: 16 // Increase font size for legend
+          }
+        }
       },
       title: {
         display: true,
-        text: `${playerName}的節奏遊戲表現分析`
+        text: `${playerName}的節奏遊戲表現分析`,
+        font: {
+          size: 24 // Increase font size for title
+        }
       }
     }
   };
