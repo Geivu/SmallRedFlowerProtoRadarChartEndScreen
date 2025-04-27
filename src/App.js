@@ -21,7 +21,18 @@ ChartJS.register(
   Legend
 );
 
+// Function to generate random Chinese name
+const generateChineseName = () => {
+  const surnames = ['王', '李', '張', '劉', '陳', '楊', '黃', '趙', '周', '吳'];
+  const names = ['明', '華', '強', '偉', '芳', '娜', '秀英', '敏', '靜', '麗'];
+  const randomSurname = surnames[Math.floor(Math.random() * surnames.length)];
+  const randomName = names[Math.floor(Math.random() * names.length)];
+  return randomSurname + randomName;
+};
+
 function App() {
+  const playerName = generateChineseName();
+  
   // Sample data - replace with actual game results
   const gameResults = {
     準確度: 85,
@@ -65,7 +76,7 @@ function App() {
       },
       title: {
         display: true,
-        text: '節奏遊戲表現分析'
+        text: `${playerName}的節奏遊戲表現分析`
       }
     }
   };
@@ -74,7 +85,7 @@ function App() {
     <Container maxWidth="md">
       <Box sx={{ my: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom align="center">
-          節奏遊戲表現雷達圖
+          {playerName}表現分析
         </Typography>
         <Paper elevation={3} sx={{ p: 3 }}>
           <Radar data={data} options={options} />
