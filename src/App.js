@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
-import { Box, Container, Typography, Paper } from '@mui/material';
+import { Box, Container, Typography, Paper, Grid, Divider } from '@mui/material';
 
 // Register ChartJS components
 ChartJS.register(
@@ -42,14 +42,30 @@ const generateRandomResults = () => {
   };
 };
 
+// Function to generate detailed stats
+const generateDetailedStats = () => {
+  return {
+    latency: Math.floor(Math.random() * 50) + 50, // 50-100ms
+    accuracy: Math.floor(Math.random() * 20) + 80, // 80-100%
+    hitStreak: Math.floor(Math.random() * 50) + 50, // 50-100 hits
+    perfectHits: Math.floor(Math.random() * 30) + 20, // 20-50 hits
+    missCount: Math.floor(Math.random() * 10), // 0-10 misses
+    averageReactionTime: Math.floor(Math.random() * 100) + 100, // 100-200ms
+    maxCombo: Math.floor(Math.random() * 100) + 50, // 50-150 combo
+    totalScore: Math.floor(Math.random() * 50000) + 50000 // 50000-100000
+  };
+};
+
 function App() {
   const [playerName, setPlayerName] = useState(generateChineseName());
   const [gameResults, setGameResults] = useState(generateRandomResults());
+  const [detailedStats, setDetailedStats] = useState(generateDetailedStats());
 
   useEffect(() => {
     const timer = setInterval(() => {
       setPlayerName(generateChineseName());
       setGameResults(generateRandomResults());
+      setDetailedStats(generateDetailedStats());
     }, 60000); // Update every minute (60000 ms)
 
     return () => clearInterval(timer); // Cleanup on component unmount
@@ -82,12 +98,12 @@ function App() {
         suggestedMax: 100,
         ticks: {
           font: {
-            size: 16 // Increase font size for axis labels
+            size: 16
           }
         },
         pointLabels: {
           font: {
-            size: 18 // Increase font size for category labels
+            size: 18
           }
         }
       }
@@ -97,7 +113,7 @@ function App() {
         position: 'top',
         labels: {
           font: {
-            size: 16 // Increase font size for legend
+            size: 16
           }
         }
       },
@@ -105,7 +121,7 @@ function App() {
         display: true,
         text: `${playerName}的節奏遊戲表現分析`,
         font: {
-          size: 24 // Increase font size for title
+          size: 24
         }
       }
     }
@@ -119,6 +135,41 @@ function App() {
         </Typography>
         <Paper elevation={3} sx={{ p: 3 }}>
           <Radar data={data} options={options} />
+          <Divider sx={{ my: 3 }} />
+          <Grid container spacing={2}>
+            <Grid item xs={6} md={3}>
+              <Typography variant="h6" color="primary">延遲</Typography>
+              <Typography variant="h4">{detailedStats.latency}ms</Typography>
+            </Grid>
+            <Grid item xs={6} md={3}>
+              <Typography variant="h6" color="primary">準確率</Typography>
+              <Typography variant="h4">{detailedStats.accuracy}%</Typography>
+            </Grid>
+            <Grid item xs={6} md={3}>
+              <Typography variant="h6" color="primary">連擊數</Typography>
+              <Typography variant="h4">{detailedStats.hitStreak}</Typography>
+            </Grid>
+            <Grid item xs={6} md={3}>
+              <Typography variant="h6" color="primary">完美擊中</Typography>
+              <Typography variant="h4">{detailedStats.perfectHits}</Typography>
+            </Grid>
+            <Grid item xs={6} md={3}>
+              <Typography variant="h6" color="primary">失誤次數</Typography>
+              <Typography variant="h4">{detailedStats.missCount}</Typography>
+            </Grid>
+            <Grid item xs={6} md={3}>
+              <Typography variant="h6" color="primary">平均反應時間</Typography>
+              <Typography variant="h4">{detailedStats.averageReactionTime}ms</Typography>
+            </Grid>
+            <Grid item xs={6} md={3}>
+              <Typography variant="h6" color="primary">最大連擊</Typography>
+              <Typography variant="h4">{detailedStats.maxCombo}</Typography>
+            </Grid>
+            <Grid item xs={6} md={3}>
+              <Typography variant="h6" color="primary">總分</Typography>
+              <Typography variant="h4">{detailedStats.totalScore}</Typography>
+            </Grid>
+          </Grid>
         </Paper>
       </Box>
     </Container>
